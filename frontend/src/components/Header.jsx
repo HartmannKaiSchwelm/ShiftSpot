@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Header({ onLoginClick, onRegisterClick }) {
+function Header({ onLoginClick, isLoggedIn, loggedInEmail, onLogoutClick }) {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
@@ -18,13 +18,28 @@ function Header({ onLoginClick, onRegisterClick }) {
         isScrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : ''
       }`}
     >
-      <div className="text-2xl font-bold ">Shift Spot</div>
+      <div className="text-2xl font-bold text-blue-600">Shift Spot</div>
       <nav className="flex items-center gap-4">
         <a href="#home" className="text-blue-600 hover:underline">Home</a>
         <a href="#features" className="text-blue-600 hover:underline">Features</a>
-        
-        <button onClick={onLoginClick} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
-       
+        {isLoggedIn ? (
+          <div className="flex items-center gap-4">
+            <span className="text-blue-600">Hallo, {loggedInEmail}</span>
+            <button
+              onClick={onLogoutClick}
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onLoginClick}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Login
+          </button>
+        )}
       </nav>
     </header>
   );

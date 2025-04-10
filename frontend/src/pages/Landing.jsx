@@ -1,47 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import App from '../App';
+import "../App.css"
 
 function Landing() {
   const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
   const [betaEmail, setBetaEmail] = useState('');
+  const [betaEmails, setBetaEmails] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInEmail, setLoggedInEmail] = useState("");
+
+  useEffect(() => {
+    fetch('/beta-emails.json')
+      .then(res => res.json())
+      .then(data => setBetaEmails(data.emails || []))
+      .catch(() => setBetaEmails([]));
+  }, []);
 
   const handleBetaSubmit = (e) => {
     e.preventDefault();
-    console.log('Beta join request:', betaEmail);
+    const newEmails = [...betaEmails, betaEmail];
+    setBetaEmails(newEmails);
     setBetaEmail('');
     alert('Danke! Wir melden uns bei dir für die Beta.');
   };
+
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log('Login:', e.target.username.value, e.target.password.value);
+    const email = e.target.emailaddress.value;
+    if (betaEmails.includes(email)) {
+      setIsLoggedIn(true);
+      setLoggedInEmail(email);
+      setShowLogin(false);
+    } else {
+      alert('Sorry, diese E-Mail ist nicht in der Beta-Liste.');
+    }
   };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-    console.log('Register:', e.target.username.value, e.target.email.value, e.target.password.value);
-  };
+  const handleLogout = () =>{
+    setIsLoggedIn(false);
+    setLoggedInEmail("");
+  }
+  
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Include the Header */}
-      <Header onLoginClick={() => setShowLogin(true)} onRegisterClick={() => setShowRegister(true)} />
-      
-      {/* Main content */}
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="relative h-screen flex items-center justify-center text-center text-white pt-16">
-          {/* Video Background */}
-          <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover z-[-1]">
+      <Header onLoginClick={() => setShowLogin(true)} isLoggedIn={isLoggedIn} loggedInEmail={loggedInEmail} onLogoutClick={handleLogout} />
+      <main className="flex-grow pt-20">
+        {isLoggedIn ? (
+        <App betaEmails={betaEmails} />
+        ) : (
+          <>
+          <section className="relative h-screen flex items-center justify-center text-center text-white pt-16">
+          <video autoPlay loop muted className="absolute -top-20 left-0 w-full h-full object-cover z-[-1]">
             <source src="/videos/1776352-hd_1920_1080_25fps.mp4" type="video/mp4" />
-            Your browser doesn’t support video.
           </video>
-          <div className="z-10 text-shadow-lg">
+          <div className="z-10 text-shadow-lg text-shadow-blue-500">
             <h1 className="text-5xl font-bold mb-4">Rest Easy, Work Smart</h1>
             <p className="text-2xl mb-6">Personalized breaks to boost your focus and calm your mind.</p>
-             {/* Beta Input */}
-             <form onSubmit={handleBetaSubmit} className="flex gap-4 justify-center">
+            <form onSubmit={handleBetaSubmit} className="flex gap-4 justify-center">
               <input
                 type="email"
                 value={betaEmail}
@@ -55,8 +72,7 @@ function Landing() {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section id="features" className="py-16 text-center bg-gray-100">
+        <section id="features" className="py-16 -mt-20 text-center bg-gray-100">
           <h2 className="text-4xl font-bold mb-8">Why Shift Spot?</h2>
           <div className="flex justify-center gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md w-64">
@@ -73,26 +89,25 @@ function Landing() {
             </div>
           </div>
         </section>
-
-         
+        </>
+        )}
       </main>
+          
+        
+        
 
-      {/* Footer */}
       <Footer />
 
-      {/* Modals */}
       {showLogin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg flex flex-col gap-4">
             <h2 className="text-2xl text-center font-bold">Login</h2>
             <input type="text" name="emailaddress" placeholder="E-Mail address" className="p-2 border rounded" required />
-          
             <button type="submit" className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
             <button type="button" onClick={() => setShowLogin(false)} className="text-blue-600">Close</button>
           </form>
         </div>
       )}
-     
     </div>
   );
 }
