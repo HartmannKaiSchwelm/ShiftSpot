@@ -5,7 +5,14 @@ import Footer from '../components/Footer';
 function Landing() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [betaEmail, setBetaEmail] = useState('');
 
+  const handleBetaSubmit = (e) => {
+    e.preventDefault();
+    console.log('Beta join request:', betaEmail);
+    setBetaEmail('');
+    alert('Danke! Wir melden uns bei dir für die Beta.');
+  };
   const handleLogin = (e) => {
     e.preventDefault();
     console.log('Login:', e.target.username.value, e.target.password.value);
@@ -33,7 +40,18 @@ function Landing() {
           <div className="z-10 text-shadow-lg">
             <h1 className="text-5xl font-bold mb-4">Rest Easy, Work Smart</h1>
             <p className="text-2xl mb-6">Personalized breaks to boost your focus and calm your mind.</p>
-            <button onClick={() => setShowRegister(true)} className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700">Get Started</button>
+             {/* Beta Input */}
+             <form onSubmit={handleBetaSubmit} className="flex gap-4 justify-center">
+              <input
+                type="email"
+                value={betaEmail}
+                onChange={(e) => setBetaEmail(e.target.value)}
+                placeholder="Want to join the beta? Enter your E-Mail"
+                className="p-2 rounded-lg border text-black w-78 bg-white/40 backdrop-blur-md"
+                required
+              />
+              <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Join!</button>
+            </form>
           </div>
         </section>
 
@@ -56,39 +74,7 @@ function Landing() {
           </div>
         </section>
 
-         {/* Pricing */}
-         <section id="pricing" className="py-16 text-center">
-          <h2 className="text-4xl font-bold mb-8">Choose Your Plan</h2>
-          <div className="flex justify-center gap-8">
-            <div className="bg-gray-100 p-6 rounded-lg w-64">
-              <h3 className="text-2xl font-semibold mb-2">Free</h3>
-              <p className="text-lg mb-4">$0/month</p>
-              <ul className="text-left mb-4">
-                <li>Basic breaks</li>
-                <li>1 background & sound</li>
-              </ul>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Start Free</button>
-            </div>
-            <div className="bg-gray-100 p-6 rounded-lg w-64">
-              <h3 className="text-2xl font-semibold mb-2">Pro</h3>
-              <p className="text-lg mb-4">$5/month</p>
-              <ul className="text-left mb-4">
-                <li>Custom schedules</li>
-                <li>5 backgrounds & sounds</li>
-              </ul>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Go Pro</button>
-            </div>
-            <div className="bg-gray-100 p-6 rounded-lg w-64">
-              <h3 className="text-2xl font-semibold mb-2">Premium</h3>
-              <p className="text-lg mb-4">$10/month</p>
-              <ul className="text-left mb-4">
-                <li>Spotify sync</li>
-                <li>Unlimited options</li>
-              </ul>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Get Premium</button>
-            </div>
-          </div>
-        </section>
+         
       </main>
 
       {/* Footer */}
@@ -98,26 +84,15 @@ function Landing() {
       {showLogin && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg flex flex-col gap-4">
-            <h2 className="text-2xl font-bold">Login</h2>
-            <input type="text" name="username" placeholder="Username" className="p-2 border rounded" required />
-            <input type="password" name="password" placeholder="Password" className="p-2 border rounded" required />
+            <h2 className="text-2xl text-center font-bold">Login</h2>
+            <input type="text" name="emailaddress" placeholder="E-Mail address" className="p-2 border rounded" required />
+          
             <button type="submit" className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
             <button type="button" onClick={() => setShowLogin(false)} className="text-blue-600">Close</button>
           </form>
         </div>
       )}
-      {showRegister && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <form onSubmit={handleRegister} className="bg-white p-6 rounded-lg flex flex-col gap-4">
-            <h2 className="text-2xl font-bold">Register</h2>
-            <input type="text" name="username" placeholder="Username" className="p-2 border rounded" required />
-            <input type="email" name="email" placeholder="Email" className="p-2 border rounded" required />
-            <input type="password" name="password" placeholder="Password" className="p-2 border rounded" required />
-            <button type="submit" className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Register</button>
-            <button type="button" onClick={() => setShowRegister(false)} className="text-blue-600">Close</button>
-          </form>
-        </div>
-      )}
+     
     </div>
   );
 }

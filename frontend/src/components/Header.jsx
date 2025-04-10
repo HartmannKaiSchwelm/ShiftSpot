@@ -22,9 +22,9 @@ function Header({ onLoginClick, onRegisterClick }) {
       <nav className="flex items-center gap-4">
         <a href="#home" className="text-blue-600 hover:underline">Home</a>
         <a href="#features" className="text-blue-600 hover:underline">Features</a>
-        <a href="#pricing" className="text-blue-600 hover:underline">Pricing</a>
-        <button onClick={onLoginClick} className="text-blue-600 hover:underline">Login</button>
-        <button onClick={onRegisterClick} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Register</button>
+        
+        <button onClick={onLoginClick} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
+       
       </nav>
     </header>
   );
