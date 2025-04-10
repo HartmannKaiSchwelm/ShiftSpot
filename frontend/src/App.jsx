@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Sound1 from '../public/sounds/Rain_On_Rooftop.mp3';
-
+import Notification from './components/Notification';
 function App({ betaEmails }) {
   const [breaks, setBreaks] = useState([]);
   const [form, setForm] = useState({ start: '08:00', end: '17:00', style: 'deep', crashTime: '12:00' });
@@ -9,6 +9,7 @@ function App({ betaEmails }) {
   const [timeLeft, setTimeLeft] = useState(null);
   const [fadeClass, setFadeClass] = useState('');
   const audioRef = useRef(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     console.log('useEffect triggered, breaks:', breaks);
@@ -25,8 +26,8 @@ function App({ betaEmails }) {
         const timeout = new Date(`${today} ${nextBreak.time}`).getTime() - now.getTime();
         if (timeout > 0) {
           const timer = setTimeout(() => {
-            alert(`Break at ${nextBreak.time}!`);
-            setCurrentBreak(nextBreak);
+            setCurrentBreak(nextBreak); // Zuerst setzen
+            setNotification(`Break at ${nextBreak.time}!`); // Danach verwenden
           }, timeout);
           return () => clearTimeout(timer);
         }
@@ -134,6 +135,9 @@ function App({ betaEmails }) {
           </button>
         </form>
       </div>
+      {notification && (
+  <Notification message={notification} onClose={() => setNotification(null)} />
+)}
       {currentBreak && (
         <div className="max-w-md mx-auto mt-4">
           <button

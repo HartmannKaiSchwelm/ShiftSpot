@@ -8,9 +8,13 @@ function Landing() {
   const [showLogin, setShowLogin] = useState(false);
   const [betaEmail, setBetaEmail] = useState('');
   const [betaEmails, setBetaEmails] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedInEmail, setLoggedInEmail] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true'); // Liest isLoggedIn aus localStorage
+  const [loggedInEmail, setLoggedInEmail] = useState(() => localStorage.getItem('loggedInEmail') || ''); // Liest loggedInEmail aus localStorage
 
+  useEffect(() => {
+    localStorage.setItem('isLoggedIn', isLoggedIn); // Speichert isLoggedIn in localStorage
+    localStorage.setItem('loggedInEmail', loggedInEmail); // Speichert loggedInEmail in localStorage
+  });
   useEffect(() => {
     fetch('/beta-emails.json')
       .then(res => res.json())
