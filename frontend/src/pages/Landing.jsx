@@ -75,7 +75,7 @@ function Landing() {
         <section id="features" className="py-16 -mt-20 text-center bg-gray-100">
           <h2 className="text-4xl font-bold mb-8">Why Shift Spot?</h2>
           <div className="flex justify-center gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md w-64">
+            <div className="bg-blue-100 p-6 rounded-lg shadow-md w-64">
               <h3 className="text-2xl font-semibold mb-4">Smart Breaks</h3>
               <p>AI-driven schedules tailored to your day.</p>
             </div>
@@ -83,7 +83,7 @@ function Landing() {
               <h3 className="text-2xl font-semibold mb-4">Customize Your Vibe</h3>
               <p>Pick backgrounds and sounds that suit you.</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md w-64">
+            <div className="bg-blue-100 p-6 rounded-lg shadow-md w-64">
               <h3 className="text-2xl font-semibold mb-4">Spotify Sync</h3>
               <p>Chill to your favorite playlists.</p>
             </div>
@@ -99,7 +99,7 @@ function Landing() {
       <Footer />
 
       {showLogin && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+        <div className="fixed inset-0 bg-gray-400/80 bg-opacity-50 flex items-center justify-center z-20">
           <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg flex flex-col gap-4">
             <h2 className="text-2xl text-center font-bold">Login</h2>
             <input type="text" name="emailaddress" placeholder="E-Mail address" className="p-2 border rounded" required />
