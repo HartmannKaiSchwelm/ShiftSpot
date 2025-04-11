@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import UserSettingsPage from './UserSettingsPage.jsx'; // Import der neuen Seite
 import App from '../App';
 import "../App.css"
 
@@ -10,11 +11,16 @@ function Landing() {
   const [betaEmails, setBetaEmails] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggedIn') === 'true'); // Liest isLoggedIn aus localStorage
   const [loggedInEmail, setLoggedInEmail] = useState(() => localStorage.getItem('loggedInEmail') || ''); // Liest loggedInEmail aus localStorage
+  const [currentPage, setCurrentPage] = useState('landing'); // State für die aktuelle Seite
+  const [backgroundImage, setBackgroundImage] = useState(() => localStorage.getItem('backgroundImage') || '/images/forest.jpg'); // State für Hintergrund
 
   useEffect(() => {
     localStorage.setItem('isLoggedIn', isLoggedIn); // Speichert isLoggedIn in localStorage
     localStorage.setItem('loggedInEmail', loggedInEmail); // Speichert loggedInEmail in localStorage
   });
+  useEffect(() => {
+    localStorage.setItem('backgroundImage', backgroundImage); // Speichert den gewählten Hintergrund
+  }, [backgroundImage]);
   useEffect(() => {
     fetch('/beta-emails.json')
       .then(res => res.json())
@@ -49,13 +55,30 @@ function Landing() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header onLoginClick={() => setShowLogin(true)} isLoggedIn={isLoggedIn} loggedInEmail={loggedInEmail} onLogoutClick={handleLogout} />
-      <main className="flex-grow pt-20">
-        {isLoggedIn ? (
-        <App betaEmails={betaEmails} />
-        ) : (
-          <>
-          <section className="relative h-screen flex items-center justify-center text-center text-white pt-16">
+    <Header
+  onLoginClick={() => setShowLogin(true)}
+  isLoggedIn={isLoggedIn}
+  loggedInEmail={loggedInEmail}
+  onLogoutClick={handleLogout}
+  onSettingsClick={() => setCurrentPage('settings')} // Bereits korrekt, aber zur Sicherheit
+/>
+<main className="flex-grow pt-20">
+  {isLoggedIn ? (
+    currentPage === 'settings' ? (
+      <UserSettingsPage
+      onBackgroundChange={(url) => {
+        console.log('Changing background to:', url); // Debug-Log
+        setBackgroundImage(url);
+      }}
+      currentBackground={backgroundImage}
+      onBackClick={() => setCurrentPage('landing')}
+    />
+    ) : (
+      <App betaEmails={betaEmails} setBackgroundImage={setBackgroundImage} backgroundImage={backgroundImage}/>
+    )
+  ) : (
+    <>
+      <section className="relative h-screen flex items-center justify-center text-center text-white">
           <video autoPlay loop muted className="absolute -top-20 left-0 w-full h-full object-cover z-[-1]">
             <source src="/videos/1776352-hd_1920_1080_25fps.mp4" type="video/mp4" />
           </video>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Header({ onLoginClick, isLoggedIn, loggedInEmail, onLogoutClick }) {
+function Header({ onLoginClick, isLoggedIn, loggedInEmail, onLogoutClick, onSettingsClick }) {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
@@ -20,27 +20,32 @@ function Header({ onLoginClick, isLoggedIn, loggedInEmail, onLogoutClick }) {
     >
       <div className="text-2xl font-bold text-blue-600">Shift Spot</div>
       <nav className="flex items-center gap-4">
-        <a href="#home" className="text-blue-600 hover:underline">Home</a>
-        <a href="#features" className="text-blue-600 hover:underline">Features</a>
-        {isLoggedIn ? (
-          <div className="flex items-center gap-4">
-            <span className="text-blue-600">Hallo, {loggedInEmail}</span>
-            <button
-              onClick={onLogoutClick}
-              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={onLoginClick}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Login
-          </button>
-        )}
-      </nav>
+  <a href="#home" className="text-blue-600 hover:underline">Home</a>
+  {isLoggedIn ? (
+    <>
+      <button onClick={onSettingsClick} className="text-blue-600 hover:underline">Settings</button>
+      <div className="flex items-center gap-4">
+        <span className="text-blue-600">Hallo, {loggedInEmail}</span>
+        <button
+          onClick={onLogoutClick}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Logout
+        </button>
+      </div>
+    </>
+  ) : (
+    <>
+      <a href="#features" className="text-blue-600 hover:underline">Features</a>
+      <button
+        onClick={onLoginClick}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Login
+      </button>
+    </>
+  )}
+</nav>
     </header>
   );
 }

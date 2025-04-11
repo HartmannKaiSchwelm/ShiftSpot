@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Sound1 from '../public/sounds/Rain_On_Rooftop.mp3';
 import Notification from './components/Notification';
-function App({ betaEmails }) {
+
+function App({ betaEmails, setBackgroundImage, backgroundImage }) {
   const [breaks, setBreaks] = useState([]);
   const [form, setForm] = useState({ start: '08:00', end: '17:00', style: 'deep', crashTime: '12:00' });
   const [isResting, setIsResting] = useState(false);
@@ -10,6 +11,7 @@ function App({ betaEmails }) {
   const [fadeClass, setFadeClass] = useState('');
   const audioRef = useRef(null);
   const [notification, setNotification] = useState(null);
+  
 
   useEffect(() => {
     console.log('useEffect triggered, breaks:', breaks);
@@ -34,6 +36,9 @@ function App({ betaEmails }) {
       }
     }
   }, [breaks]);
+
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,13 +78,17 @@ function App({ betaEmails }) {
   };
 
   if (isResting) {
-    return (
-      <div className={`rest-screen ${fadeClass}`}>
+    return (<>
+      
+      <div className={`rest-screen ${fadeClass}`} style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}> 
+      {console.log('Rest screen background URL:', backgroundImage)}
+      <div className="bg-black/30 p-8 backdrop-blur-lg rounded-lg text-center ">
         <h1 className="text-4xl font-bold mb-4">Resting...</h1>
         <p className="text-2xl">
           Back in {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-        </p>
+        </p></div>
       </div>
+      </>
     );
   }
 
