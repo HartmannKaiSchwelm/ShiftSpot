@@ -13,19 +13,25 @@ function Landing() {
   const [loggedInEmail, setLoggedInEmail] = useState(() => localStorage.getItem('loggedInEmail') || ''); // Liest loggedInEmail aus localStorage
   const [currentPage, setCurrentPage] = useState('landing'); // State für die aktuelle Seite
   const [backgroundImage, setBackgroundImage] = useState(() => localStorage.getItem('backgroundImage') || '/images/forest.jpg'); // State für Hintergrund
+  const [isLoadingEmails, setIsLoadingEmails] = useState(false); // State für E-Mail-Ladevorgang
+
 
   useEffect(() => {
     localStorage.setItem('isLoggedIn', isLoggedIn); // Speichert isLoggedIn in localStorage
     localStorage.setItem('loggedInEmail', loggedInEmail); // Speichert loggedInEmail in localStorage
   });
+
   useEffect(() => {
     localStorage.setItem('backgroundImage', backgroundImage); // Speichert den gewählten Hintergrund
   }, [backgroundImage]);
+
   useEffect(() => {
+    setIsLoadingEmails(true); // Startet Ladevorgang
     fetch('/beta-emails.json')
       .then(res => res.json())
       .then(data => setBetaEmails(data.emails || []))
-      .catch(() => setBetaEmails([]));
+      .catch(() => setBetaEmails([]))
+      .finally(() => setIsLoadingEmails(false));
   }, []);
 
   const handleBetaSubmit = (e) => {
@@ -79,7 +85,12 @@ function Landing() {
   ) : (
     <>
       <section className="relative h-screen flex items-center justify-center text-center text-white">
-          <video autoPlay loop muted className="absolute -top-20 left-0 w-full h-full object-cover z-[-1]">
+      {isLoadingEmails ? (
+    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+      <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  ) : null}
+  <video autoPlay loop muted className="absolute -top-20 left-0 w-full h-full object-cover z-[-1]">
             <source src="/videos/1776352-hd_1920_1080_25fps.mp4" type="video/mp4" />
           </video>
           <div className="z-10 text-shadow-lg text-shadow-blue-500">

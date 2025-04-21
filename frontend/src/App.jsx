@@ -11,7 +11,8 @@ function App({ betaEmails, setBackgroundImage, backgroundImage }) {
   const [fadeClass, setFadeClass] = useState('');
   const audioRef = useRef(null);
   const [notification, setNotification] = useState(null);
-  
+  const [isLoadingSchedule, setIsLoadingSchedule] = useState(false); // State für Schedule-Ladevorgang
+
 
   useEffect(() => {
     console.log('useEffect triggered, breaks:', breaks);
@@ -42,6 +43,7 @@ function App({ betaEmails, setBackgroundImage, backgroundImage }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoadingSchedule(true); //startet Ladevorgang
     const res = await fetch('http://localhost:3000/schedule', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -49,6 +51,7 @@ function App({ betaEmails, setBackgroundImage, backgroundImage }) {
     });
     const data = await res.json();
     setBreaks(data);
+    setIsLoadingSchedule(false); //Beendet Ladevorgang
   };
 
   const startRest = () => {
@@ -95,8 +98,13 @@ function App({ betaEmails, setBackgroundImage, backgroundImage }) {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Shift Spot Beta</h1>
-      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md relative">
+  {isLoadingSchedule ? (
+    <div className="absolute inset-0 flex items-center justify-center bg-white/80">
+      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  ) : null}
+  <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col">
             <label className="text-gray-700 font-semibold mb-1">Start Time</label>
             <input
